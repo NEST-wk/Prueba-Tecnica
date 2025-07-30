@@ -1,0 +1,17 @@
+Sección 1: Preguntas Teóricas  
+1. Optimización de consultas 
+o Explica cómo optimizarías una consulta SQL que está tardando demasiado en 
+ejecutarse. 
+
+R:
+
+o ¿Qué estrategias usarías para cachear resultados de consultas frecuentes? 
+2. Seguridad de datos 
+o Describe las mejores prácticas para prevenir inyección SQL en consultas automatizadas. 
+o ¿Cómo manejarías credenciales de acceso a la base de datos en un ambiente de 
+automatización? 
+3. Automatización 
+o ¿Qué patrones de diseño considerarías para implementar un sistema de consultas 
+automatizadas? 
+o Explica cómo implementarías reintentos automáticos para consultas que fallan 
+temporalmente. 
