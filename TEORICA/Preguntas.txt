@@ -3,15 +3,42 @@ Sección 1: Preguntas Teóricas
 o Explica cómo optimizarías una consulta SQL que está tardando demasiado en 
 ejecutarse. 
 
-R:
+R:En caso de mysql utilizaria explain para ver el plan de ejecucion de la consulta, para ver donde esta el cuello de botella , una vez identificado el problema se pueden usar indices que mejorar la velocidad de respuesta.
+  Tambien evitaria usar en la consulta SELECT *, para no traer informacion irelevante y en su lugar usar SELECT.
 
 o ¿Qué estrategias usarías para cachear resultados de consultas frecuentes? 
+
+R: si los datos no cambian mucho Redis. Permite guardar los resultados en memoria usando un TTL dependiendo de la frecuencia con la que esos datos se actualizan,
+   tambien permite guardar el resultado enh un csv o json que son persistentes para ser usado en reportes.
+
 2. Seguridad de datos 
 o Describe las mejores prácticas para prevenir inyección SQL en consultas automatizadas. 
+  
+R: Primero parametrizar las consultas , usando placeholders para luego pasar los datos como texto para que no sean tratados como codigo sql, usar orms como sequalize que parametrizan las consultas internamente tambien es bueno,
+   luego tambien hay que proteger las rutas que reciben datos del usuario usando JWT.
+
 o ¿Cómo manejarías credenciales de acceso a la base de datos en un ambiente de 
 automatización? 
+
+R: Utilizaria un archivo de variables de entorno .env donde se especifiquen los datos de necesarios para la conexion a la bd , muy importante que el archivo no sea subido a repositorio como github.
+
 3. Automatización 
 o ¿Qué patrones de diseño considerarías para implementar un sistema de consultas 
 automatizadas? 
+
+R: usaria un patron de diseño basado en arquitectura en capas con patrones Command y Scheduler
+
+   Arquitectura en capas (Layered Architecture):
+   Para organizar el sistema en capas separadas como rutas, controladores, lógica de negocio (services) y tareas programadas, promoviendo un código limpio y mantenible.
+
+   Command Pattern:
+   Cada consulta automatizada se encapsula como un comando ejecutable, lo que permite mayor flexibilidad al definir, ejecutar o programar consultas como objetos independientes.
+
+   Scheduler Pattern:
+   Utilizado para ejecutar tareas automáticamente en horarios definidos (como consultas periódicas), con cron jobs centralizados en una capa de programación.
+
+
 o Explica cómo implementarías reintentos automáticos para consultas que fallan 
 temporalmente. 
+
+R: Usando p-retry, definiendo un maximo de intentos con una estrategia de backoff para evitar la saturacion, ademas que los errores al ejecutar la consulta se almacenan una tabla de errores o log para evitar el creasheo de la app.

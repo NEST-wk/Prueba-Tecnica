@@ -1,0 +1,98 @@
+
+DIAGRAMA ER
+
+┌────────────┐
+│   users    │
+├────────────┤
+│ id (PK)    │
+│ ...        │
+└────┬───────┘
+     │ 1
+     │
+     ▼ N
+┌────────────────────┐
+│  query_templates   │
+├────────────────────┤
+│ id (PK)            │
+│ user_id (FK)       │◄────────────┐
+│ name               │             │
+│ sql_text           │             │
+│ parameters_json    │             │
+│ description        │             │
+│ created_at         │             │
+└────┬───────────────┘             │
+     │ 1                           │
+     │                             │
+     ▼ N                           │
+┌──────────────────────┐           │
+│  scheduled_queries   │           │
+├──────────────────────┤           │
+│ id (PK)              │           │
+│ template_id (FK)     │◄──────────┘
+│ cron_expression      │
+│ email_to             │
+│ is_active            │
+│ last_run             │
+│ created_at           │
+└────┬─────────────────┘
+     │ 1
+     │
+     ▼ N
+┌────────────────────┐
+│  query_results     │
+├────────────────────┤
+│ id (PK)            │
+│ scheduled_query_id │ (FK)
+│ executed_at        │
+│ status             │
+│ result_csv         │
+│ error_message      │
+└────────────────────┘
+
+
+ENDPOINTS 
+
++----------------------------------------------------------+
+| METODOS  |   RUTAS          |   PARAMETROS  |  RESPUESTAS|
++----------------------------------------------------------+
+| POST     |   /templates     |   Body        |  201       |
+| GET      |   /templates     |               |  200       |
+| GET      |   /templates/:id |   id          |  404       |
+| DELETE   |   /templates/:id |   id          |  204       |
++----------------------------------------------------------+
+
+
+------------------------------------------------------
+ESQUEMA DE BASE DE DATOS
+------------------------------------------------------
+CREATE TABLE IF NOT EXISTS query_templates (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT,
+      name VARCHAR(255) NOT NULL,
+      sql_text TEXT NOT NULL,
+      parameters_json JSON,
+      description TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+
+CREATE TABLE IF NOT EXISTS scheduled_queries (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      template_id INT NOT NULL,
+      cron_expression VARCHAR(100) NOT NULL,
+      email_to VARCHAR(255) NOT NULL,
+      is_active BOOLEAN DEFAULT TRUE,
+      last_run TIMESTAMP NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (template_id) REFERENCES query_templates(id)
+    );
+
+CREATE TABLE IF NOT EXISTS query_results (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      scheduled_query_id INT NOT NULL,
+      executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      status VARCHAR(20),
+      result_csv TEXT,
+      error_message TEXT,
+      FOREIGN KEY (scheduled_query_id) REFERENCES scheduled_queries(id)
+    );
