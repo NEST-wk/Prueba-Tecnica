@@ -4,8 +4,8 @@ import { getConnection } from '../config/db.js';
 import { generateCsvBuffer } from '../utils/csv.js';
 import { transporter } from '../config/mail.js';
 
-// ────────────────────────────────────────────────────────────────
-// Carga las tareas ACTIVAS y las registra en node-cron
+
+// Carga las tareas activas y las registra en node-cron
 // ────────────────────────────────────────────────────────────────
 export async function loadScheduledJobs() {
     const conn = await getConnection();
@@ -24,7 +24,7 @@ export async function loadScheduledJobs() {
     jobs.forEach(scheduleOneJob);
 }
 
-// ────────────────────────────────────────────────────────────────
+
 function scheduleOneJob(job) {
     if (!cron.validate(job.cron_expression)) {
         console.error(`❌ Cron inválido: ${job.cron_expression} (id ${job.id})`);

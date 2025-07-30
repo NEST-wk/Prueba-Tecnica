@@ -53,7 +53,7 @@ export async function deleteScheduledQuery(req, res) {
         if (result.affectedRows === 0)
             return res.status(404).json({ error: 'Tarea no encontrada' });
 
-        res.status(204).send();          // ✔️ eliminada
+        res.status(204).send();          // eliminada
     } catch (err) {
         await conn.end();
         console.error('❌ Error al eliminar tarea satisfactoriamente:', err.message);

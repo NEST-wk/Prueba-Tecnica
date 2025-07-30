@@ -9,7 +9,7 @@ async function sendTestEmail() {
             from: `"Test API" <${process.env.EMAIL_USER}>`,
             to: "devamimod@gmail.com",
             subject: "✅ Prueba de correo",
-            text: "Este es un correo de prueba desde tu API Node.js"
+            text: "Este es un correo de prueba desde la API Node.js"
         });
 
         console.log("📧 Enviado:", info.messageId);
